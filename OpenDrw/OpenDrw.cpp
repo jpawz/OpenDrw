@@ -58,6 +58,10 @@ extern "C" void user_terminate()
 int OpenDrw()
 {
 	ProErr err = PRO_TK_NO_ERROR;
+	
+	int old_win_id;
+	ProWindowCurrentGet(&old_win_id);
+
 	ProMdl model;
 	err = ProMdlCurrentGet(&model);
 	if (err != PRO_TK_NO_ERROR)
@@ -79,6 +83,7 @@ int OpenDrw()
 	{
 		char msg[] = "nie znaleziono rysunku";
 		ProMessageDisplay(msgFile, msg);
+		ProWindowActivate(old_win_id);
 		return 0;
 	}
 
@@ -94,6 +99,6 @@ static uiCmdAccessState AccessAvailable(uiCmdAccessMode access_mode)
 
 void initializeMsgFile()
 {
-	char MSGFIL[] = "text.txt";
+	char MSGFIL[] = "opendrw.txt";
 	ProStringToWstring(msgFile, MSGFIL);
 }
