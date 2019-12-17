@@ -19,6 +19,9 @@ using namespace std;
 
 int OpenDrw();
 static uiCmdAccessState AccessAvailable(uiCmdAccessMode);
+void initializeMsgFile();
+
+ProFileName msgFile;
 
 extern "C" int main(int argc, char** argv)
 {
@@ -29,10 +32,9 @@ extern "C" int main(int argc, char** argv)
 extern "C" int user_initialize()
 {
 	ProErr err = PRO_TK_NO_ERROR;
-	ProFileName MsgFile;
 	uiCmdCmdId OpenDrwButton_cmd_id;
-	char MSGFIL[] = "text.txt";
-	ProStringToWstring(MsgFile, MSGFIL);
+
+	initializeMsgFile();
 	
 	char openDrwAct[] = "OpenDrwAct";
 	ProCmdActionAdd(openDrwAct, (uiCmdCmdActFn)OpenDrw,
@@ -42,7 +44,7 @@ extern "C" int user_initialize()
 	char item_n[] = "OpenDrwName";
 	char item_h[] = "Otworz rysunek";
 	ProMenubarmenuPushbuttonAdd(util_c, item_n, item_n, item_h, NULL,
-		PRO_B_TRUE, OpenDrwButton_cmd_id, MsgFile);
+		PRO_B_TRUE, OpenDrwButton_cmd_id, msgFile);
 
 
 	return 0;
@@ -55,9 +57,6 @@ extern "C" void user_terminate()
 
 int OpenDrw()
 {
-	ProFileName MsgFile;
-	char MSGFIL[] = "text.txt";
-	ProStringToWstring(MsgFile, MSGFIL);
 	ProErr err = PRO_TK_NO_ERROR;
 	ProMdl model;
 	err = ProMdlCurrentGet(&model);
@@ -79,7 +78,7 @@ int OpenDrw()
 	if (err != PRO_TK_NO_ERROR)
 	{
 		char msg[] = "nie znaleziono rysunku";
-		ProMessageDisplay(MsgFile, msg);
+		ProMessageDisplay(msgFile, msg);
 		return 0;
 	}
 
@@ -91,4 +90,10 @@ int OpenDrw()
 static uiCmdAccessState AccessAvailable(uiCmdAccessMode access_mode)
 {
 	return (ACCESS_AVAILABLE);
+}
+
+void initializeMsgFile()
+{
+	char MSGFIL[] = "text.txt";
+	ProStringToWstring(msgFile, MSGFIL);
 }
