@@ -2,18 +2,11 @@
 Retrives drawing (*.dwg) for active model (*.prt or *.asm).
  */
 
-#include <windows.h>
-#include <string.h>
-#include <ProToolkit.h>
-#include <ProMenu.h>
+#include <ProCore.h>
 #include <ProMenuBar.h>
-#include <ProWindows.h>
 #include <ProMessage.h>
 #include <ProUtil.h>
-#include <ProCore.h>
-#include <ProMdl.h>
-#include <ProUICmd.h>
-
+#include <ProWindows.h>
 
 using namespace std;
 
@@ -35,30 +28,28 @@ extern "C" int user_initialize()
 	uiCmdCmdId OpenDrwButton_cmd_id;
 
 	initializeMsgFile();
-	
+
 	char openDrwAct[] = "OpenDrwAct";
 	ProCmdActionAdd(openDrwAct, (uiCmdCmdActFn)OpenDrw,
-		uiCmdPrioDefault, AccessAvailable, PRO_B_FALSE,
-		PRO_B_FALSE, &OpenDrwButton_cmd_id);
+	                uiCmdPrioDefault, AccessAvailable, PRO_B_FALSE,
+	                PRO_B_FALSE, &OpenDrwButton_cmd_id);
 	char util_c[] = "Utilities";
 	char item_n[] = "OpenDrwName";
 	char item_h[] = "Otworz rysunek";
-	ProMenubarmenuPushbuttonAdd(util_c, item_n, item_n, item_h, NULL,
-		PRO_B_TRUE, OpenDrwButton_cmd_id, msgFile);
-
+	ProMenubarmenuPushbuttonAdd(util_c, item_n, item_n, item_h, nullptr,
+	                            PRO_B_TRUE, OpenDrwButton_cmd_id, msgFile);
 
 	return 0;
 }
 
 extern "C" void user_terminate()
 {
-	return;
 }
 
 int OpenDrw()
 {
 	ProErr err = PRO_TK_NO_ERROR;
-	
+
 	int old_win_id;
 	ProWindowCurrentGet(&old_win_id);
 
